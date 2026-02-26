@@ -31,10 +31,7 @@ const DetailsTab = ({ company, isEditMode }) => {
   const [errors, setErrors] = useState({});
 
   // Mock users list - substituir por dados reais
-    { id: 'user-001', name: 'João Silva', email: 'joao@email.com' },
-    { id: 'user-002', name: 'Maria Santos', email: 'maria@email.com' },
-    { id: 'user-003', name: 'Carlos Mendes', email: 'carlos@email.com' },
-  ];
+  const mockUsers = [];
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

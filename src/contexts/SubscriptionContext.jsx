@@ -28,7 +28,7 @@ export const SubscriptionProvider = ({ children }) => {
       // const response = await api.get('/api/subscriptions/me');
       // setSubscription(response.data.data);
 
-      // TODO: Buscar dados da API
+      // Sem dados mockados - iniciar vazio
       setSubscription(null);
     } catch (err) {
       console.error('Error fetching subscription:', err);
@@ -48,42 +48,13 @@ export const SubscriptionProvider = ({ children }) => {
       // const { owned, member } = response.data.data;
       // setCompanies([...owned, ...member]);
 
-      // Mock data
-        {
-          _id: 'company-1',
-          name: user.empresa || 'Minha Empresa',
-          slug: (user.empresa || 'minha-empresa').toLowerCase().replace(/\s+/g, '-'),
-          logo: null,
-          ownerId: user._id,
-          inheritedPlan: subscription?.plan || 'free',
-          status: 'active',
-          role: 'owner', // Role do usuário atual nesta empresa
-          department: null,
-          permissions: ['all'],
-          members: [
-            {
-              userId: user._id,
-              role: 'owner',
-              department: null,
-              permissions: ['all'],
-              joinedAt: new Date(),
-            },
-          ],
-          usage: {
-            totalMembers: 1,
-            storageUsed: 0,
-            contactsCount: 0,
-            messagesCount: 0,
-          },
-        },
-      ];
-
-      setCompanies(mockCompanies);
+      // Sem dados mockados - array vazio
+      setCompanies([]);
 
       // Definir empresa atual
       const savedCompanyId = localStorage.getItem('currentCompanyId');
-      const company = mockCompanies.find((c) => c._id === savedCompanyId) || mockCompanies[0];
-      setCurrentCompany(company);
+      // Apenas set null se não houver empresas
+      setCurrentCompany(null);
     } catch (err) {
       console.error('Error fetching companies:', err);
       setError(err.message);
@@ -224,13 +195,15 @@ export const SubscriptionProvider = ({ children }) => {
       localStorage.setItem('currentCompanyId', newCompany._id);
 
       // Atualizar usage da subscription
-      setSubscription((prev) => ({
-        ...prev,
-        usage: {
-          ...prev.usage,
-          companiesCreated: prev.usage.companiesCreated + 1,
-        },
-      }));
+      setSubscription((prev) => (
+        prev ? {
+          ...prev,
+          usage: {
+            ...prev.usage,
+            companiesCreated: (prev.usage?.companiesCreated || 0) + 1,
+          },
+        } : null
+      ));
 
       return { success: true, data: newCompany };
     } catch (err) {
