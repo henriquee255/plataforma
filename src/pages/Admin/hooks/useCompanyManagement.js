@@ -21,61 +21,8 @@ export const useCompanyManagement = () => {
       // const response = await api.get('/admin/companies');
       // setCompanies(response.data);
 
-      // Mock data
-      const mockCompanies = [
-        {
-          id: '1',
-          name: 'Empresa Alpha',
-          logo: null,
-          status: 'Ativo',
-          membersCount: 25,
-          ownerName: 'João Silva',
-          ownerEmail: 'joao@alpha.com',
-          createdAt: '2024-01-15T10:00:00Z',
-        },
-        {
-          id: '2',
-          name: 'Beta Solutions',
-          logo: null,
-          status: 'Ativo',
-          membersCount: 12,
-          ownerName: 'Maria Santos',
-          ownerEmail: 'maria@beta.com.br',
-          createdAt: '2024-02-01T14:30:00Z',
-        },
-        {
-          id: '3',
-          name: 'Gamma Tech',
-          logo: null,
-          status: 'Suspenso',
-          membersCount: 5,
-          ownerName: 'Pedro Costa',
-          ownerEmail: 'pedro@gamma.tech',
-          createdAt: '2023-12-10T09:15:00Z',
-        },
-        {
-          id: '4',
-          name: 'Delta Corp',
-          logo: null,
-          status: 'Ativo',
-          membersCount: 50,
-          ownerName: 'Ana Oliveira',
-          ownerEmail: 'ana@deltacorp.com',
-          createdAt: '2024-01-20T11:45:00Z',
-        },
-        {
-          id: '5',
-          name: 'Epsilon Sistemas',
-          logo: null,
-          status: 'Ativo',
-          membersCount: 8,
-          ownerName: 'Carlos Mendes',
-          ownerEmail: 'carlos@epsilon.com.br',
-          createdAt: '2024-02-10T16:20:00Z',
-        },
-      ];
-
-      setCompanies(mockCompanies);
+      // Array vazio - sem dados mockados
+      setCompanies([]);
     } catch (err) {
       setError(err.message || 'Erro ao buscar empresas');
       console.error('Erro ao buscar empresas:', err);

@@ -35,51 +35,12 @@ const Reports = () => {
     { id: 'agents', label: 'Por Funcionário', icon: FaUsers },
   ];
 
-  // Dados MOCK
-  const conversationsByDay = [
-    { day: 'Seg', count: 45, label: '18/02' },
-    { day: 'Ter', count: 52, label: '19/02' },
-    { day: 'Qua', count: 38, label: '20/02' },
-    { day: 'Qui', count: 61, label: '21/02' },
-    { day: 'Sex', count: 48, label: '22/02' },
-    { day: 'Sáb', count: 22, label: '23/02' },
-    { day: 'Dom', count: 15, label: '24/02' },
-  ];
-
-  const responseTimeData = [
-    { day: 'Seg', minutes: 12 },
-    { day: 'Ter', minutes: 8 },
-    { day: 'Qua', minutes: 15 },
-    { day: 'Qui', minutes: 9 },
-    { day: 'Sex', minutes: 11 },
-    { day: 'Sáb', minutes: 7 },
-    { day: 'Dom', minutes: 6 },
-  ];
-
-  const topPerformers = [
-    { name: 'Desenvolvedor 1', avatar: 'D1', conversations: 87, satisfaction: 4.9, trend: 'up' },
-    { name: 'Designer 1', avatar: 'DS', conversations: 76, satisfaction: 4.8, trend: 'up' },
-    { name: 'Analista 1', avatar: 'A1', conversations: 68, satisfaction: 4.7, trend: 'same' },
-    { name: 'Programador 1', avatar: 'P1', conversations: 61, satisfaction: 4.6, trend: 'down' },
-    { name: 'Desenvolvedor 2', avatar: 'D2', conversations: 54, satisfaction: 4.5, trend: 'up' },
-  ];
-
-  const channelDistribution = [
-    { name: 'WhatsApp', icon: <FaWhatsapp />, count: 145, percentage: 48, color: 'from-green-500 to-emerald-600' },
-    { name: 'Widget', icon: <FaComment />, count: 98, percentage: 32, color: 'from-purple-500 to-purple-600' },
-    { name: 'Email', icon: <FaEnvelope />, count: 42, percentage: 14, color: 'from-blue-500 to-blue-600' },
-    { name: 'Telegram', icon: <FaTelegram />, count: 18, percentage: 6, color: 'from-sky-500 to-sky-600' },
-  ];
-
-  const satisfactionOverTime = [
-    { day: 'Seg', score: 4.5 },
-    { day: 'Ter', score: 4.6 },
-    { day: 'Qua', score: 4.4 },
-    { day: 'Qui', score: 4.7 },
-    { day: 'Sex', score: 4.8 },
-    { day: 'Sáb', score: 4.9 },
-    { day: 'Dom', score: 4.8 },
-  ];
+  // Dados vazios - sem dados mockados
+  const conversationsByDay = [];
+  const responseTimeData = [];
+  const topPerformers = [];
+  const channelDistribution = [];
+  const satisfactionOverTime = [];
 
   const maxConversations = Math.max(...conversationsByDay.map((d) => d.count));
   const maxResponseTime = Math.max(...responseTimeData.map((d) => d.minutes));
