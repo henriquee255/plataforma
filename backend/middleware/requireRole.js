@@ -7,7 +7,7 @@
  * Middleware que requer roles específicas
  * @param {string|string[]} allowedRoles - Role(s) permitida(s)
  */
-export const requireRole = (allowedRoles) => {
+const requireRole = (allowedRoles) => {
   // Normalizar para array
   const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
 
@@ -38,14 +38,14 @@ export const requireRole = (allowedRoles) => {
 /**
  * Middleware que requer role admin
  */
-export const requireAdmin = requireRole('admin');
+const requireAdmin = requireRole('admin');
 
 /**
  * Middleware que requer role admin ou manager
  */
-export const requireManager = requireRole(['admin', 'manager']);
+const requireManager = requireRole(['admin', 'manager']);
 
-export default {
+module.exports = {
   requireRole,
   requireAdmin,
   requireManager,

@@ -1,11 +1,11 @@
-import { verifyToken, extractTokenFromHeader } from '../utils/jwt.js';
-import UserModel from '../models/User.js';
+const { verifyToken, extractTokenFromHeader } = require('../utils/jwt');
+const UserModel = require('../models/User');
 
 /**
  * Middleware de autenticação JWT
  * Verifica se o usuário está autenticado e adiciona req.user
  */
-export const authenticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
     // Extrair token do header
     const token = extractTokenFromHeader(req.headers.authorization);
@@ -24,7 +24,7 @@ export const authenticate = async (req, res, next) => {
     }
 
     // Adicionar user ao request (sem a senha)
-    const { password, ...userWithoutPassword } = user;
+    const { password, ...userWithoutPassword } = user.toObject ? user.toObject() : user;
     req.user = userWithoutPassword;
 
     next();
@@ -40,7 +40,7 @@ export const authenticate = async (req, res, next) => {
  * Middleware opcional de autenticação
  * Se houver token válido, adiciona req.user, senão continua sem autenticação
  */
-export const optionalAuthenticate = async (req, res, next) => {
+const optionalAuthenticate = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
       return next();
@@ -51,7 +51,7 @@ export const optionalAuthenticate = async (req, res, next) => {
     const user = await UserModel.findById(decoded.userId);
 
     if (user) {
-      const { password, ...userWithoutPassword } = user;
+      const { password, ...userWithoutPassword } = user.toObject ? user.toObject() : user;
       req.user = userWithoutPassword;
     }
 
@@ -62,7 +62,7 @@ export const optionalAuthenticate = async (req, res, next) => {
   }
 };
 
-export default {
+module.exports = {
   authenticate,
   optionalAuthenticate,
 };
