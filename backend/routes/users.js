@@ -5,8 +5,8 @@ const {
   updateUserRole,
   deleteUser,
 } = require('../controllers/userController');
-const { authenticate } = require('../middlewares/authMiddleware');
-const { requireAdmin } = require('../middlewares/requireRole');
+const { authenticate } = require('../middleware/authMiddleware');
+const { requireAdmin } = require('../middleware/requireRole');
 
 const router = express.Router();
 
