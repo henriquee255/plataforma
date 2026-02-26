@@ -4,7 +4,6 @@ import { render } from '@testing-library/react';
 import { AppProvider } from '../../contexts/AppContext';
 
 // Mock AppContext para testes
-const mockContextValue = {
   savingStatus: null,
   lastSaved: null,
   updateSavingStatus: jest.fn(),

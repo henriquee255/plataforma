@@ -81,7 +81,6 @@ const AdminUserManagement = ({ onNavigate }) => {
   });
 
   // Dados mockados de usuários (simulando API)
-  const mockUsers = [
     {
       id: 1,
       name: 'Henrique de Oliveira',

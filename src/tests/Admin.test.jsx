@@ -48,9 +48,7 @@ vi.mock('../hooks/useAuth', () => ({
 global.fetch = vi.fn();
 
 describe('Admin Component', () => {
-  const mockNavigate = vi.fn();
 
-  const mockUsers = [
     {
       id: '1',
       name: 'Admin User',

@@ -3,7 +3,6 @@ import { renderHook, act } from '@testing-library/react';
 import { useNotification } from '../hooks/useNotification';
 
 // Mock do useToast
-const mockToast = vi.fn();
 
 vi.mock('@/hooks/use-toast', () => ({
   useToast: () => ({

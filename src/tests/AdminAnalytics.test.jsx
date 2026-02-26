@@ -36,7 +36,6 @@ vi.mock('recharts', () => ({
 }));
 
 describe('AdminAnalytics', () => {
-  const mockOnNavigate = vi.fn();
 
   it('deve renderizar o componente AdminAnalytics após o carregamento', async () => {
     render(<AdminAnalytics onNavigate={mockOnNavigate} />);

@@ -51,14 +51,12 @@ describe('useAuth Hook', () => {
   });
 
   it('deve fazer login com sucesso', async () => {
-    const mockUser = {
       id: '1',
       name: 'Teste User',
       email: 'teste@example.com',
       role: 'user',
     };
 
-    const mockResponse = {
       success: true,
       user: mockUser,
       accessToken: 'fake-access-token',
@@ -90,7 +88,6 @@ describe('useAuth Hook', () => {
   });
 
   it('deve retornar erro ao fazer login com credenciais inválidas', async () => {
-    const mockError = new Error('Email ou senha inválidos');
 
     authService.login.mockRejectedValueOnce(mockError);
 
@@ -116,7 +113,6 @@ describe('useAuth Hook', () => {
 
   it('deve fazer logout e limpar dados', async () => {
     // Simular usuário logado
-    const mockUser = {
       id: '1',
       name: 'Test',
       email: 'test@example.com',
@@ -152,14 +148,12 @@ describe('useAuth Hook', () => {
   });
 
   it('deve registrar novo usuário com sucesso', async () => {
-    const mockUser = {
       id: '1',
       name: 'Novo User',
       email: 'novo@example.com',
       role: 'user',
     };
 
-    const mockResponse = {
       success: true,
       user: mockUser,
       accessToken: 'fake-access-token',
@@ -194,7 +188,6 @@ describe('useAuth Hook', () => {
   });
 
   it('deve retornar erro ao registrar com email duplicado', async () => {
-    const mockError = new Error('Email já cadastrado');
 
     authService.register.mockRejectedValueOnce(mockError);
 
@@ -222,7 +215,6 @@ describe('useAuth Hook', () => {
   });
 
   it('deve carregar usuário do localStorage ao inicializar', async () => {
-    const mockUser = {
       id: '1',
       name: 'Saved User',
       email: 'saved@example.com',
@@ -246,7 +238,6 @@ describe('useAuth Hook', () => {
   });
 
   it('deve limpar dados se token estiver expirado', async () => {
-    const mockUser = {
       id: '1',
       name: 'Expired User',
       email: 'expired@example.com',

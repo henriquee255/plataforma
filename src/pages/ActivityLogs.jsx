@@ -96,7 +96,6 @@ const ActivityLogs = ({ onNavigate }) => {
       'Safari 17 - iOS 17',
     ];
 
-    const mockLogs = [];
     const now = new Date();
 
     for (let i = 0; i < 150; i++) {
@@ -143,7 +142,6 @@ const ActivityLogs = ({ onNavigate }) => {
 
   // Carregar logs
   useEffect(() => {
-    const mockLogs = generateMockLogs();
     setLogs(mockLogs);
     setFilteredLogs(mockLogs);
     setIsLoading(false);

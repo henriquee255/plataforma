@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import Unauthorized from '../pages/Unauthorized';
 
 describe('Unauthorized Component', () => {
-  const mockNavigate = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -54,7 +53,6 @@ describe('Unauthorized Component', () => {
 
   it('deve chamar history.back ao clicar em "Página Anterior"', async () => {
     const user = userEvent.setup();
-    const mockBack = vi.fn();
     window.history.back = mockBack;
 
     render(<Unauthorized onNavigate={mockNavigate} />);

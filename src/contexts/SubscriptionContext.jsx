@@ -29,7 +29,6 @@ export const SubscriptionProvider = ({ children }) => {
       // setSubscription(response.data.data);
 
       // Mock data
-      const mockSubscription = {
         _id: 'sub-1',
         userId: user._id,
         plan: user.plano || 'free', // Usar plano do user temporariamente
@@ -66,7 +65,6 @@ export const SubscriptionProvider = ({ children }) => {
       // setCompanies([...owned, ...member]);
 
       // Mock data
-      const mockCompanies = [
         {
           _id: 'company-1',
           name: user.empresa || 'Minha Empresa',

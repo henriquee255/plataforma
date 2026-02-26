@@ -28,7 +28,6 @@ vi.mock('../utils/tokenStorage', () => ({
 import * as authService from '../services/authService';
 
 describe('LoginNew Component', () => {
-  const mockNavigate = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -142,7 +141,6 @@ describe('LoginNew Component', () => {
   it('deve chamar login com credenciais corretas', async () => {
     const user = userEvent.setup();
 
-    const mockResponse = {
       success: true,
       user: { id: '1', name: 'Test', email: 'test@example.com', role: 'user' },
       accessToken: 'token',
@@ -192,7 +190,6 @@ describe('LoginNew Component', () => {
   it('deve navegar para dashboard após login bem-sucedido', async () => {
     const user = userEvent.setup();
 
-    const mockResponse = {
       success: true,
       user: { id: '1', name: 'Test', email: 'test@example.com', role: 'user' },
       accessToken: 'token',

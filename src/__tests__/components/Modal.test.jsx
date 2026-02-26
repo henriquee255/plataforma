@@ -7,7 +7,6 @@ import '@testing-library/jest-dom';
 import Modal from '../../components/Modal';
 
 describe('Modal Component', () => {
-  const mockOnClose = jest.fn();
 
   beforeEach(() => {
     mockOnClose.mockClear();
