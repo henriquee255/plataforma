@@ -32,47 +32,10 @@ const Dashboard = ({ integrations = [], onNavigate }) => {
     return plataforma ? plataforma.name : '';
   };
 
-  // Clientes esperando há mais de 30 minutos (otimizado com useMemo)
+  // Clientes esperando há mais de 30 minutos (vazio por padrão)
   const clientesEsperando = useMemo(() => {
-    return [
-      {
-        id: 1,
-        nome: 'João Silva',
-        primeiramensagem: new Date(Date.now() - 45 * 60 * 1000), // 45 minutos atrás
-        ultimaMensagem: 'Preciso de ajuda urgente com o pagamento',
-        ultimaMensagemHora: new Date(Date.now() - 5 * 60 * 1000), // última msg 5 min atrás
-        atribuidoPara: 'Maria Santos',
-        foiAtendido: false
-      },
-      {
-        id: 2,
-        nome: 'Ana Costa',
-        primeiramensagem: new Date(Date.now() - 120 * 60 * 1000), // 2 horas atrás
-        ultimaMensagem: 'Olá?',
-        ultimaMensagemHora: new Date(Date.now() - 15 * 60 * 1000), // última msg 15 min atrás
-        atribuidoPara: null,
-        foiAtendido: false
-      },
-      {
-        id: 3,
-        nome: 'Carlos Mendes',
-        primeiramensagem: new Date(Date.now() - 90 * 60 * 1000), // 1.5 horas atrás
-        ultimaMensagem: 'Quando vou receber meu produto?',
-        ultimaMensagemHora: new Date(Date.now() - 90 * 60 * 1000), // mesma hora (não mandou outra)
-        atribuidoPara: 'Pedro Oliveira',
-        foiAtendido: false
-      },
-      {
-        id: 4,
-        nome: 'Beatriz Lima',
-        primeiramensagem: new Date(Date.now() - 35 * 60 * 1000), // 35 minutos atrás
-        ultimaMensagem: 'Tem alguém aí?',
-        ultimaMensagemHora: new Date(Date.now() - 10 * 60 * 1000), // última msg 10 min atrás
-        atribuidoPara: null,
-        foiAtendido: false
-      }
-    ].filter(cliente => !cliente.foiAtendido); // Remove clientes que foram atendidos
-  }, []); // Recalcula apenas quando necessário
+    return []; // Sem dados mockados
+  }, []);
 
   // Função para calcular tempo de espera
   const calcularTempoEspera = (dataInicial) => {
