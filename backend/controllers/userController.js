@@ -1,10 +1,10 @@
-import UserModel from '../models/User.js';
+const UserModel = require('../models/User');
 
 /**
  * GET /api/users
  * Listar todos os usuários (admin only)
  */
-export const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.findAll();
 
@@ -33,7 +33,7 @@ export const getAllUsers = async (req, res) => {
  * GET /api/users/:id
  * Obter usuário por ID (admin only)
  */
-export const getUserById = async (req, res) => {
+const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await UserModel.findById(id);
@@ -66,7 +66,7 @@ export const getUserById = async (req, res) => {
  * PATCH /api/users/:id/role
  * Atualizar role do usuário (admin only)
  */
-export const updateUserRole = async (req, res) => {
+const updateUserRole = async (req, res) => {
   try {
     const { id } = req.params;
     const { role } = req.body;
@@ -124,7 +124,7 @@ export const updateUserRole = async (req, res) => {
  * DELETE /api/users/:id
  * Deletar usuário (admin only)
  */
-export const deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -159,7 +159,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   getAllUsers,
   getUserById,
   updateUserRole,
