@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-02-23T21:38:29.791Z",
+  "orchestration": {
+    "active": false,
+    "mode": "bob",
+    "epic_id": null,
+    "current_story": null
+  },
+  "pipeline": {
+    "stages": [
+      "validation",
+      "development",
+      "self_healing",
+      "quality_gate",
+      "push",
+      "checkpoint"
+    ],
+    "current_stage": null,
+    "story_progress": "0/0",
+    "completed_stages": []
+  },
+  "current_agent": {
+    "id": null,
+    "name": null,
+    "task": null,
+    "reason": null,
+    "started_at": null
+  },
+  "active_terminals": [],
+  "surface_decisions": [],
+  "elapsed": {
+    "story_seconds": 0,
+    "session_seconds": 0
+  },
+  "errors": [],
+  "educational": {
+    "enabled": false,
+    "tradeoffs": [],
+    "reasoning": []
+  }
+}

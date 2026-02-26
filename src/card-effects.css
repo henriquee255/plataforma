@@ -1,0 +1,83 @@
+/* Efeitos especiais para os cards */
+
+/* Sombras coloridas e bordas para cada tipo de card */
+.card-purple {
+  border-color: #1f2937;
+  transition: all 0.5s ease;
+}
+
+.card-purple:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 20px 60px -10px rgba(139, 92, 246, 0.6),
+              0 0 0 1px rgba(139, 92, 246, 0.2),
+              0 0 40px rgba(139, 92, 246, 0.3);
+}
+
+.card-amber {
+  border-color: #1f2937;
+  transition: all 0.5s ease;
+}
+
+.card-amber:hover {
+  border-color: #d97706;
+  box-shadow: 0 20px 60px -10px rgba(217, 119, 6, 0.6),
+              0 0 0 1px rgba(217, 119, 6, 0.2),
+              0 0 40px rgba(217, 119, 6, 0.3);
+}
+
+.card-emerald {
+  border-color: #1f2937;
+  transition: all 0.5s ease;
+}
+
+.card-emerald:hover {
+  border-color: #059669;
+  box-shadow: 0 20px 60px -10px rgba(5, 150, 105, 0.6),
+              0 0 0 1px rgba(5, 150, 105, 0.2),
+              0 0 40px rgba(5, 150, 105, 0.3);
+}
+
+.card-red {
+  border-color: #1f2937;
+  transition: all 0.5s ease;
+}
+
+.card-red:hover {
+  border-color: #dc2626;
+  box-shadow: 0 20px 60px -10px rgba(220, 38, 38, 0.6),
+              0 0 0 1px rgba(220, 38, 38, 0.2),
+              0 0 40px rgba(220, 38, 38, 0.3);
+}
+
+.card-orange {
+  border-color: #1f2937;
+  transition: all 0.5s ease;
+}
+
+.card-orange:hover {
+  border-color: #f97316;
+  box-shadow: 0 20px 60px -10px rgba(249, 115, 22, 0.6),
+              0 0 0 1px rgba(249, 115, 22, 0.2),
+              0 0 40px rgba(249, 115, 22, 0.3);
+}
+
+.card-sky {
+  border-color: #1f2937;
+  transition: all 0.5s ease;
+}
+
+.card-sky:hover {
+  border-color: #0284c7;
+  box-shadow: 0 20px 60px -10px rgba(2, 132, 199, 0.6),
+              0 0 0 1px rgba(2, 132, 199, 0.2),
+              0 0 40px rgba(2, 132, 199, 0.3);
+}
+
+/* Animação de elevação suave - SEM PULSO */
+.card-hover-effect {
+  transition: transform 0.7s ease, box-shadow 0.7s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-8px);
+}

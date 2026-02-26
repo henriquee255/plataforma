@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Theme</title>
+</head>
+<body>
+    <h1>Reset Theme</h1>
+    <button onclick="resetTheme()">Reset para Dark</button>
+    <button onclick="setLight()">Set Light</button>
+    <button onclick="checkTheme()">Verificar Tema Atual</button>
+    <pre id="output"></pre>
+    
+    <script>
+        function resetTheme() {
+            const settings = {
+                theme: 'dark',
+                notifications: true,
+                autoSave: true,
+                language: 'pt-BR'
+            };
+            localStorage.setItem('appSettings', JSON.stringify(settings));
+            document.getElementById('output').textContent = 'Tema resetado para DARK! Recarregue a página principal.';
+        }
+        
+        function setLight() {
+            const settings = JSON.parse(localStorage.getItem('appSettings') || '{}');
+            settings.theme = 'light';
+            localStorage.setItem('appSettings', JSON.stringify(settings));
+            document.getElementById('output').textContent = 'Tema alterado para LIGHT! Recarregue a página principal.';
+        }
+        
+        function checkTheme() {
+            const settings = localStorage.getItem('appSettings');
+            document.getElementById('output').textContent = 'AppSettings:\n' + settings;
+        }
+    </script>
+</body>
+</html>

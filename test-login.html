@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #9333ea;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #9333ea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #7e22ce;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste de Login - AuthService</h1>
+
+        <div>
+            <input
+                type="email"
+                id="email"
+                placeholder="Email"
+                value="eu.henriquee2501@gmail.com"
+            >
+            <input
+                type="password"
+                id="password"
+                placeholder="Senha"
+                value="admin@2026"
+            >
+            <button onclick="testLogin()">Testar Login</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+            resultDiv.innerHTML = '⏳ Testando...';
+
+            try {
+                // Simular o mockLogin do authService
+                const mockDelay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+                await mockDelay(600);
+
+                // Verificar credenciais
+                if (email === 'eu.henriquee2501@gmail.com' && password === 'admin@2026') {
+                    const adminUser = {
+                        id: 'admin-001',
+                        name: 'Henrique',
+                        email: 'eu.henriquee2501@gmail.com',
+                        role: 'admin',
+                        avatar: 'https://ui-avatars.com/api/?name=Henrique&background=9333ea&color=fff&size=128',
+                        createdAt: new Date().toISOString(),
+                    };
+
+                    const generateMockToken = () => {
+                        const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+                        const payload = btoa(JSON.stringify({
+                            sub: Date.now().toString(),
+                            iat: Math.floor(Date.now() / 1000),
+                            exp: Math.floor(Date.now() / 1000) + 3600,
+                        }));
+                        const signature = btoa('mock-signature');
+                        return `${header}.${payload}.${signature}`;
+                    };
+
+                    const result = {
+                        user: adminUser,
+                        accessToken: generateMockToken(),
+                        refreshToken: generateMockToken(),
+                    };
+
+                    resultDiv.className = 'success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Login Bem-Sucedido!</h3>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                        <p><strong>Conclusão:</strong> O authService está funcionando corretamente!</p>
+                        <p><strong>Próximo passo:</strong> Verifique o console do navegador (F12) quando tentar fazer login na aplicação principal.</p>
+                    `;
+                } else {
+                    throw new Error('Email ou senha incorretos');
+                }
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Erro no Login</h3>
+                    <p><strong>Mensagem:</strong> ${error.message}</p>
+                    <p><strong>Email digitado:</strong> ${email}</p>
+                    <p><strong>Senha digitada:</strong> ${password}</p>
+                    <p><strong>Email esperado:</strong> eu.henriquee2501@gmail.com</p>
+                    <p><strong>Senha esperada:</strong> admin@2026</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

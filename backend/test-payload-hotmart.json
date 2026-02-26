@@ -1,0 +1,32 @@
+{
+  "event": "PURCHASE_COMPLETE",
+  "data": {
+    "purchase": {
+      "transaction": "hot_test_987654",
+      "status": "approved",
+      "price": {
+        "value": 97.00,
+        "currency_code": "BRL"
+      },
+      "buyer": {
+        "name": "Maria Santos (Teste)",
+        "email": "maria.teste@email.com",
+        "phone": "+55 11 98765-4322"
+      },
+      "product": {
+        "id": "prod_002",
+        "name": "Super Presell - Assinatura Mensal"
+      },
+      "subscription": {
+        "plan": {
+          "name": "Plano Mensal"
+        }
+      },
+      "commissions": [
+        {
+          "value": 48.50
+        }
+      ]
+    }
+  }
+}

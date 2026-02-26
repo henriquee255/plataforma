@@ -1,0 +1,18 @@
+{
+  "event": "order.paid",
+  "order_id": "kw_test_123456",
+  "order_amount": 49700,
+  "order_status": "paid",
+  "subscription_id": null,
+  "commissions_amount": 24850,
+  "Customer": {
+    "full_name": "João da Silva (Teste)",
+    "email": "joao.teste@email.com",
+    "CPF": "123.456.789-00",
+    "phone": "+55 11 98765-4321"
+  },
+  "Product": {
+    "product_id": "prod_001",
+    "product_name": "Super Links - Plano Vitalício"
+  }
+}

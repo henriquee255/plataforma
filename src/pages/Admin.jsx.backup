@@ -1,0 +1,726 @@
+import { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useNotification } from '../hooks/useNotification.jsx';
+import { useAppContext } from '../contexts/AppContext';
+import PageHeader from '@/components/custom/PageHeader';
+import StatCard from '@/components/custom/StatCard';
+import DataTable from '@/components/custom/DataTable';
+import SearchBar from '@/components/custom/SearchBar';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  FaUsers,
+  FaUserShield,
+  FaUserTie,
+  FaUser,
+  FaChartLine,
+  FaCrown,
+  FaEdit,
+  FaTrash,
+  FaSync,
+  FaEye,
+  FaBan,
+  FaCheck,
+  FaKey,
+  FaExchangeAlt,
+  FaDollarSign,
+  FaRocket,
+  FaBuilding,
+  FaStar,
+  FaFilter,
+  FaCog,
+  FaHistory,
+} from 'react-icons/fa';
+import AdminAnalytics from './AdminAnalytics';
+import GlobalSettings from './GlobalSettings';
+
+const Admin = ({ onNavigate }) => {
+  const [activeTab, setActiveTab] = useState('users'); // 'users', 'analytics', ou 'settings'
+  const { user } = useAuth();
+  const { notifySuccess, notifyError, notifyUpdated, notifyDeleted } = useNotification();
+
+  // Estado de usuários e filtros
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
+
+  // Modais
+  const [viewUserModal, setViewUserModal] = useState(null);
+  const [editUserModal, setEditUserModal] = useState(null);
+  const [changePlanModal, setChangePlanModal] = useState(null);
+  const [resetPasswordModal, setResetPasswordModal] = useState(null);
+
+  // Form states
+  const [editForm, setEditForm] = useState({});
+  const [newPlan, setNewPlan] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
+  const [stats, setStats] = useState({
+    total: 0,
+    admins: 0,
+    managers: 0,
+    users: 0,
+    trial: 0,
+    starter: 0,
+    professional: 0,
+    enterprise: 0,
+    active: 0,
+    inactive: 0,
+  });
+
+  // Verificar se é admin
+  useEffect(() => {
+    if (user?.role !== 'admin') {
+      onNavigate && onNavigate('unauthorized');
+    }
+  }, [user, onNavigate]);
+
+  // Dados mockados de usuários (simulando API)
+  const mockUsers = [
+    {
+      id: 1,
+      name: 'Henrique de Oliveira',
+      email: 'eu.henriquee2501@gmail.com',
+      role: 'admin',
+      plan: 'enterprise',
+      status: 'active',
+      createdAt: '2024-01-15T10:30:00Z',
+      lastLogin: '2024-02-24T15:45:00Z',
+      avatar: 'https://ui-avatars.com/api/?name=Henrique+Oliveira&background=9333ea&color=fff&size=128',
+      phone: '(11) 98765-4321',
+      company: 'Synkra Tech',
+    },
+    {
+      id: 2,
+      name: 'Maria Santos',
+      email: 'maria.santos@empresa.com',
+      role: 'manager',
+      plan: 'professional',
+      status: 'active',
+      createdAt: '2024-01-20T14:20:00Z',
+      lastLogin: '2024-02-24T12:30:00Z',
+      avatar: null,
+      phone: '(11) 91234-5678',
+      company: 'Tech Solutions',
+    },
+    {
+      id: 3,
+      name: 'João Silva',
+      email: 'joao.silva@email.com',
+      role: 'user',
+      plan: 'starter',
+      status: 'active',
+      createdAt: '2024-02-01T09:15:00Z',
+      lastLogin: '2024-02-23T18:20:00Z',
+      avatar: null,
+      phone: '(21) 99876-5432',
+      company: 'Startup Inc',
+    },
+    {
+      id: 4,
+      name: 'Ana Costa',
+      email: 'ana.costa@gmail.com',
+      role: 'user',
+      plan: 'trial',
+      status: 'active',
+      createdAt: '2024-02-20T11:00:00Z',
+      lastLogin: '2024-02-24T10:15:00Z',
+      avatar: null,
+      phone: '(11) 95555-1234',
+      company: null,
+    },
+    {
+      id: 5,
+      name: 'Pedro Oliveira',
+      email: 'pedro@example.com',
+      role: 'user',
+      plan: 'professional',
+      status: 'inactive',
+      createdAt: '2024-01-10T08:00:00Z',
+      lastLogin: '2024-02-10T16:00:00Z',
+      avatar: null,
+      phone: '(85) 98888-7777',
+      company: 'Digital Co',
+    },
+    {
+      id: 6,
+      name: 'Carla Mendes',
+      email: 'carla.mendes@corp.com',
+      role: 'manager',
+      plan: 'enterprise',
+      status: 'active',
+      createdAt: '2024-01-25T13:45:00Z',
+      lastLogin: '2024-02-24T14:00:00Z',
+      avatar: null,
+      phone: '(11) 97777-6666',
+      company: 'Enterprise Corp',
+    },
+    {
+      id: 7,
+      name: 'Bruno Lima',
+      email: 'bruno.lima@test.com',
+      role: 'user',
+      plan: 'starter',
+      status: 'active',
+      createdAt: '2024-02-15T10:30:00Z',
+      lastLogin: '2024-02-23T09:45:00Z',
+      avatar: null,
+      phone: '(31) 96666-5555',
+      company: 'Small Business',
+    },
+    {
+      id: 8,
+      name: 'Juliana Rocha',
+      email: 'juliana@company.com',
+      role: 'user',
+      plan: 'trial',
+      status: 'inactive',
+      createdAt: '2024-02-10T15:20:00Z',
+      lastLogin: '2024-02-12T11:30:00Z',
+      avatar: null,
+      phone: '(41) 94444-3333',
+      company: null,
+    },
+  ];
+
+  // Carregar usuários
+  const loadUsers = async () => {
+    try {
+      setIsLoading(true);
+
+      // Simulando chamada API
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      setUsers(mockUsers);
+
+      // Calcular estatísticas
+      const total = mockUsers.length;
+      const admins = mockUsers.filter((u) => u.role === 'admin').length;
+      const managers = mockUsers.filter((u) => u.role === 'manager').length;
+      const regularUsers = mockUsers.filter((u) => u.role === 'user').length;
+      const trial = mockUsers.filter((u) => u.plan === 'trial').length;
+      const starter = mockUsers.filter((u) => u.plan === 'starter').length;
+      const professional = mockUsers.filter((u) => u.plan === 'professional').length;
+      const enterprise = mockUsers.filter((u) => u.plan === 'enterprise').length;
+      const active = mockUsers.filter((u) => u.status === 'active').length;
+      const inactive = mockUsers.filter((u) => u.status === 'inactive').length;
+
+      setStats({
+        total,
+        admins,
+        managers,
+        users: regularUsers,
+        trial,
+        starter,
+        professional,
+        enterprise,
+        active,
+        inactive,
+      });
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+      notifyError('Erro ao carregar lista de usuários');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  // Atualizar role do usuário
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      const accessToken = localStorage.getItem('plataforma_access_token');
+
+      const response = await fetch(`http://localhost:3001/api/users/${userId}/role`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ role: newRole }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      notifyUpdated(`Role atualizada para: ${newRole}`);
+      loadUsers(); // Recarregar lista
+    } catch (error) {
+      console.error('Erro ao atualizar role:', error);
+      notifyError(error.message || 'Erro ao atualizar permissão');
+    }
+  };
+
+  // Deletar usuário
+  const handleDeleteUser = async (userId, userName) => {
+    if (!confirm(`Tem certeza que deseja deletar ${userName}?`)) {
+      return;
+    }
+
+    try {
+      // Simulando chamada API
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      setUsers(prev => prev.filter(u => u.id !== userId));
+      notifyDeleted(`${userName} removido do sistema`);
+      loadUsers(); // Recarregar estatísticas
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error);
+      notifyError(error.message || 'Erro ao remover usuário');
+    }
+  };
+
+  // Abrir modal de visualização
+  const handleViewUser = (user) => {
+    setViewUserModal(user);
+  };
+
+  // Abrir modal de edição
+  const handleEditUser = (user) => {
+    setEditForm({
+      name: user.name,
+      email: user.email,
+      phone: user.phone || '',
+      company: user.company || '',
+      role: user.role,
+    });
+    setEditUserModal(user);
+  };
+
+  // Salvar edição
+  const handleSaveEdit = async () => {
+    try {
+      // Simulando chamada API
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      setUsers(prev => prev.map(u =>
+        u.id === editUserModal.id
+          ? { ...u, ...editForm }
+          : u
+      ));
+
+      notifyUpdated(`Usuário ${editForm.name} atualizado com sucesso`);
+      setEditUserModal(null);
+      setEditForm({});
+    } catch (error) {
+      console.error('Erro ao salvar usuário:', error);
+      notifyError('Erro ao atualizar usuário');
+    }
+  };
+
+  // Alternar status
+  const handleToggleStatus = async (userId, currentStatus) => {
+    try {
+      // Simulando chamada API
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+      setUsers(prev => prev.map(u =>
+        u.id === userId
+          ? { ...u, status: newStatus }
+          : u
+      ));
+
+      notifyUpdated(`Status alterado para ${newStatus === 'active' ? 'Ativo' : 'Inativo'}`);
+      loadUsers();
+    } catch (error) {
+      console.error('Erro ao alterar status:', error);
+      notifyError('Erro ao alterar status');
+    }
+  };
+
+  // Abrir modal de troca de plano
+  const handleChangePlan = (user) => {
+    setNewPlan(user.plan);
+    setChangePlanModal(user);
+  };
+
+  // Salvar troca de plano
+  const handleSavePlan = async () => {
+    try {
+      // Simulando chamada API
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      setUsers(prev => prev.map(u =>
+        u.id === changePlanModal.id
+          ? { ...u, plan: newPlan }
+          : u
+      ));
+
+      notifyUpdated(`Plano alterado para ${getPlanName(newPlan)}`);
+      setChangePlanModal(null);
+      setNewPlan('');
+      loadUsers();
+    } catch (error) {
+      console.error('Erro ao alterar plano:', error);
+      notifyError('Erro ao alterar plano');
+    }
+  };
+
+  // Abrir modal de reset de senha
+  const handleResetPassword = (user) => {
+    setNewPassword('');
+    setResetPasswordModal(user);
+  };
+
+  // Salvar nova senha
+  const handleSavePassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      notifyError('A senha deve ter no mínimo 6 caracteres');
+      return;
+    }
+
+    try {
+      // Simulando chamada API
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      notifySuccess(`Senha resetada para ${resetPasswordModal.name}`);
+      setResetPasswordModal(null);
+      setNewPassword('');
+    } catch (error) {
+      console.error('Erro ao resetar senha:', error);
+      notifyError('Erro ao resetar senha');
+    }
+  };
+
+  // Funções auxiliares
+  const getPlanName = (plan) => {
+    const names = {
+      trial: 'Trial',
+      starter: 'Starter',
+      professional: 'Professional',
+      enterprise: 'Enterprise',
+    };
+    return names[plan] || plan;
+  };
+
+  const getPlanPrice = (plan) => {
+    const prices = {
+      trial: 0,
+      starter: 97,
+      professional: 297,
+      enterprise: 997,
+    };
+    return prices[plan] || 0;
+  };
+
+  const calculateMRR = () => {
+    return users.reduce((total, user) => {
+      if (user.status === 'active') {
+        return total + getPlanPrice(user.plan);
+      }
+      return total;
+    }, 0);
+  };
+
+  const calculateChurnRate = () => {
+    const inactive = users.filter(u => u.status === 'inactive').length;
+    const total = users.length;
+    return total > 0 ? ((inactive / total) * 100).toFixed(1) : 0;
+  };
+
+  // Filtrar usuários
+  const filteredUsers = users.filter(user => {
+    // Busca por texto
+    const matchesSearch = !searchTerm ||
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.company && user.company.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    // Filtro de status
+    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+
+    // Filtro de plano
+    const matchesPlan = planFilter === 'all' || user.plan === planFilter;
+
+    // Filtro de data
+    let matchesDate = true;
+    if (dateFilter !== 'all') {
+      const userDate = new Date(user.createdAt);
+      const now = new Date();
+      const daysDiff = Math.floor((now - userDate) / (1000 * 60 * 60 * 24));
+
+      if (dateFilter === '7days') matchesDate = daysDiff <= 7;
+      else if (dateFilter === '30days') matchesDate = daysDiff <= 30;
+      else if (dateFilter === '90days') matchesDate = daysDiff <= 90;
+    }
+
+    return matchesSearch && matchesStatus && matchesPlan && matchesDate;
+  });
+
+  // Badge de role
+  const getRoleBadge = (role) => {
+    const roleConfig = {
+      admin: {
+        icon: <FaCrown className="mr-1" />,
+        className: 'bg-gradient-to-r from-amber-500 to-amber-600 text-white',
+        label: 'Admin',
+      },
+      manager: {
+        icon: <FaUserTie className="mr-1" />,
+        className: 'bg-gradient-to-r from-purple-500 to-purple-600 text-white',
+        label: 'Manager',
+      },
+      user: {
+        icon: <FaUser className="mr-1" />,
+        className: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
+        label: 'Usuário',
+      },
+    };
+
+    const config = roleConfig[role] || roleConfig.user;
+
+    return (
+      <Badge className={config.className}>
+        {config.icon}
+        {config.label}
+      </Badge>
+    );
+  };
+
+  // Colunas da tabela
+  const columns = [
+    {
+      key: 'name',
+      label: 'Nome',
+      sortable: true,
+      render: (value, row) => (
+        <div className="flex items-center gap-3">
+          {row.avatar ? (
+            <img
+              src={row.avatar}
+              alt={value}
+              className="w-10 h-10 rounded-full border-2 border-purple-500"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-bold">
+              {value.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div>
+            <p className="font-semibold text-gray-900 dark:text-white">{value}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{row.email}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'role',
+      label: 'Permissão',
+      render: (value) => getRoleBadge(value),
+    },
+    {
+      key: 'createdAt',
+      label: 'Criado em',
+      render: (value) => new Date(value).toLocaleDateString('pt-BR'),
+    },
+    {
+      key: 'actions',
+      label: 'Ações',
+      render: (_, row) => (
+        <div className="flex items-center gap-2">
+          {/* Dropdown de role */}
+          <Select
+            value={row.role}
+            onValueChange={(newRole) => handleRoleChange(row.id, newRole)}
+            disabled={row.id === user?.id}
+          >
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="user">Usuário</SelectItem>
+              <SelectItem value="manager">Manager</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Botão deletar */}
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => handleDeleteUser(row.id, row.name)}
+            disabled={row.id === user?.id}
+            aria-label={`Deletar ${row.name}`}
+          >
+            <FaTrash />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  // Se estiver na aba Analytics, renderizar AdminAnalytics
+  if (activeTab === 'analytics') {
+    return <AdminAnalytics onNavigate={onNavigate} />;
+  }
+
+  // Se estiver na aba Settings, renderizar GlobalSettings
+  if (activeTab === 'settings') {
+    return <GlobalSettings onNavigate={onNavigate} />;
+  }
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <PageHeader
+        title="Painel Administrativo"
+        subtitle="Gerencie usuários, permissões e visualize métricas do sistema"
+        breadcrumbs={[
+          { label: 'Dashboard', href: '#', onClick: () => onNavigate('dashboard') },
+          { label: 'Admin' },
+        ]}
+        actions={
+          <div className="flex gap-2">
+            <Button
+              onClick={() => onNavigate('activity-logs')}
+              variant="outline"
+              className="border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+            >
+              <FaHistory className="mr-2" />
+              Logs de Atividade
+            </Button>
+            <Button onClick={loadUsers} className="bg-purple-600 hover:bg-purple-700">
+              <FaSync className="mr-2" />
+              Atualizar
+            </Button>
+          </div>
+        }
+      />
+
+      {/* Tabs de navegação */}
+      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-700">
+        <button
+          onClick={() => setActiveTab('users')}
+          className={`px-6 py-3 font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+            activeTab === 'users'
+              ? 'border-purple-600 text-purple-600'
+              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
+        >
+          <FaUserShield />
+          Usuários
+        </button>
+        <button
+          onClick={() => setActiveTab('analytics')}
+          className={`px-6 py-3 font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+            activeTab === 'analytics'
+              ? 'border-purple-600 text-purple-600'
+              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
+        >
+          <FaChartLine />
+          Analytics
+        </button>
+        <button
+          onClick={() => setActiveTab('settings')}
+          className={`px-6 py-3 font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+            activeTab === 'settings'
+              ? 'border-purple-600 text-purple-600'
+              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
+        >
+          <FaCog />
+          Configurações Globais
+        </button>
+      </div>
+
+      {/* Estatísticas */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total de Usuários"
+          value={stats.total}
+          icon={<FaUsers />}
+          trend={5}
+          trendLabel="vs. mês anterior"
+        />
+
+        <StatCard
+          title="Administradores"
+          value={stats.admins}
+          icon={<FaCrown className="text-amber-500" />}
+          description={`${((stats.admins / stats.total) * 100 || 0).toFixed(1)}% do total`}
+        />
+
+        <StatCard
+          title="Gerentes"
+          value={stats.managers}
+          icon={<FaUserTie className="text-purple-500" />}
+          description={`${((stats.managers / stats.total) * 100 || 0).toFixed(1)}% do total`}
+        />
+
+        <StatCard
+          title="Usuários Padrão"
+          value={stats.users}
+          icon={<FaUser className="text-blue-500" />}
+          description={`${((stats.users / stats.total) * 100 || 0).toFixed(1)}% do total`}
+        />
+      </div>
+
+      {/* Tabela de Usuários */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FaUserShield className="text-purple-600" />
+            Gerenciamento de Usuários
+          </CardTitle>
+          <CardDescription>
+            Visualize e gerencie todos os usuários do sistema. Altere permissões ou remova usuários conforme necessário.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <FaSync className="animate-spin text-4xl text-purple-600" />
+            </div>
+          ) : (
+            <DataTable columns={columns} data={users} />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Card de Informações */}
+      <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200 dark:border-purple-800">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-purple-900 dark:text-purple-100">
+            <FaChartLine />
+            Dica de Segurança
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-purple-800 dark:text-purple-200">
+            <strong>Importante:</strong> Mantenha o número de administradores limitado. Dê permissões de Manager para usuários que precisam gerenciar equipes, mas não acesso total ao sistema.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Admin;

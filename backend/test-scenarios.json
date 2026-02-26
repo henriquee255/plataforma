@@ -1,0 +1,120 @@
+{
+  "kiwify_refund": {
+    "event": "order.refunded",
+    "order_id": "kw_refund_001",
+    "order_amount": 49700,
+    "order_status": "refunded",
+    "subscription_id": null,
+    "commissions_amount": 0,
+    "Customer": {
+      "full_name": "Pedro Oliveira",
+      "email": "pedro.teste@email.com",
+      "CPF": "111.222.333-44",
+      "phone": "+55 21 91234-5678"
+    },
+    "Product": {
+      "product_id": "prod_001",
+      "product_name": "Super Links - Plano Vitalício"
+    }
+  },
+  "kiwify_chargeback": {
+    "event": "order.chargeback",
+    "order_id": "kw_chargeback_001",
+    "order_amount": 49700,
+    "order_status": "chargeback",
+    "subscription_id": null,
+    "commissions_amount": 0,
+    "Customer": {
+      "full_name": "Ana Costa",
+      "email": "ana.teste@email.com",
+      "CPF": "555.666.777-88",
+      "phone": "+55 11 98888-7777"
+    },
+    "Product": {
+      "product_id": "prod_001",
+      "product_name": "Super Links - Plano Vitalício"
+    }
+  },
+  "kiwify_annual": {
+    "event": "order.paid",
+    "order_id": "kw_annual_001",
+    "order_amount": 99700,
+    "order_status": "paid",
+    "subscription_id": "sub_annual_123",
+    "commissions_amount": 49850,
+    "Customer": {
+      "full_name": "Carlos Mendes",
+      "email": "carlos.teste@email.com",
+      "CPF": "999.888.777-66",
+      "phone": "+55 31 99999-8888"
+    },
+    "Product": {
+      "product_id": "prod_003",
+      "product_name": "Premium Pack - Plano Anual"
+    }
+  },
+  "hotmart_refund": {
+    "event": "PURCHASE_REFUNDED",
+    "data": {
+      "purchase": {
+        "transaction": "hot_refund_001",
+        "status": "refunded",
+        "price": {
+          "value": 97.00,
+          "currency_code": "BRL"
+        },
+        "buyer": {
+          "name": "Fernanda Silva",
+          "email": "fernanda.teste@email.com",
+          "phone": "+55 41 98777-6666"
+        },
+        "product": {
+          "id": "prod_002",
+          "name": "Super Presell - Assinatura Mensal"
+        },
+        "subscription": {
+          "plan": {
+            "name": "Plano Mensal"
+          }
+        },
+        "commissions": [
+          {
+            "value": 0
+          }
+        ]
+      }
+    }
+  },
+  "hotmart_annual": {
+    "event": "PURCHASE_COMPLETE",
+    "data": {
+      "purchase": {
+        "transaction": "hot_annual_001",
+        "status": "approved",
+        "price": {
+          "value": 997.00,
+          "currency_code": "BRL"
+        },
+        "buyer": {
+          "name": "Roberto Alves",
+          "email": "roberto.teste@email.com",
+          "phone": "+55 51 99888-7777"
+        },
+        "product": {
+          "id": "prod_004",
+          "name": "Curso Completo - Plano Anual"
+        },
+        "subscription": {
+          "plan": {
+            "name": "Plano Anual"
+          }
+        },
+        "commissions": [
+          {
+            "value": 498.50
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "activityLogs": {
+    "description": "Estrutura de dados para Activity Logs",
+    "example": {
+      "id": 1,
+      "timestamp": "2024-02-24T15:30:00.000Z",
+      "user": "João Silva",
+      "userId": 123,
+      "userEmail": "joao@example.com",
+      "action": "login",
+      "actionLabel": "Login",
+      "actionIcon": "FaSignInAlt",
+      "severity": "info",
+      "ip": "192.168.1.100",
+      "device": "Chrome 121 - Windows 10",
+      "details": "João Silva realizou login com sucesso"
+    },
+    "fields": {
+      "id": {
+        "type": "number",
+        "description": "ID único do log"
+      },
+      "timestamp": {
+        "type": "string (ISO 8601)",
+        "description": "Data e hora da ação em formato ISO"
+      },
+      "user": {
+        "type": "string",
+        "description": "Nome do usuário que executou a ação"
+      },
+      "userId": {
+        "type": "number",
+        "description": "ID do usuário no sistema"
+      },
+      "userEmail": {
+        "type": "string",
+        "description": "Email do usuário"
+      },
+      "action": {
+        "type": "string",
+        "description": "Tipo de ação (slug)",
+        "values": [
+          "login",
+          "logout",
+          "user_created",
+          "profile_updated",
+          "user_deleted",
+          "plan_changed",
+          "password_changed",
+          "api_call",
+          "failed_login",
+          "suspicious_activity"
+        ]
+      },
+      "actionLabel": {
+        "type": "string",
+        "description": "Label legível da ação"
+      },
+      "actionIcon": {
+        "type": "string",
+        "description": "Nome do ícone React Icons"
+      },
+      "severity": {
+        "type": "string",
+        "description": "Nível de severidade",
+        "values": [
+          "success",
+          "info",
+          "warning",
+          "error"
+        ]
+      },
+      "ip": {
+        "type": "string",
+        "description": "Endereço IP de origem"
+      },
+      "device": {
+        "type": "string",
+        "description": "Navegador e sistema operacional"
+      },
+      "details": {
+        "type": "string",
+        "description": "Descrição detalhada da ação"
+      }
+    },
+    "actionTypes": [
+      {
+        "type": "login",
+        "label": "Login",
+        "icon": "FaSignInAlt",
+        "severity": "info",
+        "description": "Login bem-sucedido no sistema"
+      },
+      {
+        "type": "logout",
+        "label": "Logout",
+        "icon": "FaSignOutAlt",
+        "severity": "info",
+        "description": "Saída do sistema"
+      },
+      {
+        "type": "user_created",
+        "label": "Criação de Conta",
+        "icon": "FaUserPlus",
+        "severity": "success",
+        "description": "Nova conta de usuário criada"
+      },
+      {
+        "type": "profile_updated",
+        "label": "Edição de Perfil",
+        "icon": "FaEdit",
+        "severity": "info",
+        "description": "Informações de perfil atualizadas"
+      },
+      {
+        "type": "user_deleted",
+        "label": "Exclusão de Conta",
+        "icon": "FaTrash",
+        "severity": "warning",
+        "description": "Conta de usuário removida do sistema"
+      },
+      {
+        "type": "plan_changed",
+        "label": "Troca de Plano",
+        "icon": "FaCreditCard",
+        "severity": "success",
+        "description": "Plano de assinatura alterado"
+      },
+      {
+        "type": "password_changed",
+        "label": "Troca de Senha",
+        "icon": "FaKey",
+        "severity": "warning",
+        "description": "Senha de acesso alterada"
+      },
+      {
+        "type": "api_call",
+        "label": "Chamada de API",
+        "icon": "FaDatabase",
+        "severity": "info",
+        "description": "Chamada realizada à API da plataforma"
+      },
+      {
+        "type": "failed_login",
+        "label": "Tentativa de Login Falha",
+        "icon": "FaExclamationTriangle",
+        "severity": "error",
+        "description": "Tentativa de login sem sucesso"
+      },
+      {
+        "type": "suspicious_activity",
+        "label": "Atividade Suspeita",
+        "icon": "FaExclamationTriangle",
+        "severity": "error",
+        "description": "Comportamento anormal detectado"
+      }
+    ],
+    "severityLevels": [
+      {
+        "value": "success",
+        "label": "Sucesso",
+        "icon": "FaCheckCircle",
+        "color": "green-500",
+        "description": "Ação completada com êxito"
+      },
+      {
+        "value": "info",
+        "label": "Info",
+        "icon": "FaInfoCircle",
+        "color": "blue-500",
+        "description": "Ação informativa"
+      },
+      {
+        "value": "warning",
+        "label": "Aviso",
+        "icon": "FaExclamationTriangle",
+        "color": "yellow-500",
+        "description": "Ação que requer atenção"
+      },
+      {
+        "value": "error",
+        "label": "Erro",
+        "icon": "FaTimesCircle",
+        "color": "red-500",
+        "description": "Falha ou atividade suspeita"
+      }
+    ],
+    "apiEndpoints": {
+      "getAll": {
+        "method": "GET",
+        "endpoint": "/api/admin/activity-logs",
+        "description": "Buscar todos os logs de atividade",
+        "queryParams": {
+          "page": "Número da página (padrão: 1)",
+          "limit": "Registros por página (padrão: 20)",
+          "search": "Termo de busca",
+          "action": "Filtrar por tipo de ação",
+          "severity": "Filtrar por severidade",
+          "dateStart": "Data início (ISO 8601)",
+          "dateEnd": "Data fim (ISO 8601)",
+          "userId": "Filtrar por usuário específico"
+        },
+        "response": {
+          "logs": "Array de logs",
+          "total": "Total de registros",
+          "page": "Página atual",
+          "totalPages": "Total de páginas"
+        }
+      },
+      "getById": {
+        "method": "GET",
+        "endpoint": "/api/admin/activity-logs/:id",
+        "description": "Buscar log específico por ID"
+      },
+      "getSuspicious": {
+        "method": "GET",
+        "endpoint": "/api/admin/activity-logs/suspicious",
+        "description": "Buscar apenas atividades suspeitas"
+      },
+      "getByUser": {
+        "method": "GET",
+        "endpoint": "/api/admin/activity-logs/user/:userId",
+        "description": "Buscar logs de um usuário específico"
+      },
+      "export": {
+        "method": "GET",
+        "endpoint": "/api/admin/activity-logs/export",
+        "description": "Exportar logs em CSV ou JSON",
+        "queryParams": {
+          "format": "csv ou json",
+          "filters": "Mesmo filtros do getAll"
+        }
+      }
+    },
+    "usageExamples": {
+      "fetchLogs": {
+        "javascript": "const response = await fetch('http://localhost:3001/api/admin/activity-logs?page=1&limit=20', {\n  headers: {\n    Authorization: `Bearer ${accessToken}`,\n  },\n});\nconst data = await response.json();"
+      },
+      "filterByAction": {
+        "javascript": "const response = await fetch('http://localhost:3001/api/admin/activity-logs?action=login&severity=error', {\n  headers: {\n    Authorization: `Bearer ${accessToken}`,\n  },\n});"
+      },
+      "filterByDate": {
+        "javascript": "const startDate = new Date('2024-02-01').toISOString();\nconst endDate = new Date('2024-02-24').toISOString();\nconst response = await fetch(`http://localhost:3001/api/admin/activity-logs?dateStart=${startDate}&dateEnd=${endDate}`, {\n  headers: {\n    Authorization: `Bearer ${accessToken}`,\n  },\n});"
+      },
+      "searchLogs": {
+        "javascript": "const response = await fetch('http://localhost:3001/api/admin/activity-logs?search=joao@example.com', {\n  headers: {\n    Authorization: `Bearer ${accessToken}`,\n  },\n});"
+      },
+      "exportCSV": {
+        "javascript": "const response = await fetch('http://localhost:3001/api/admin/activity-logs/export?format=csv', {\n  headers: {\n    Authorization: `Bearer ${accessToken}`,\n  },\n});\nconst blob = await response.blob();\nconst url = URL.createObjectURL(blob);\nconst link = document.createElement('a');\nlink.href = url;\nlink.download = 'activity_logs.csv';\nlink.click();"
+      }
+    },
+    "backendImplementation": {
+      "database": {
+        "table": "activity_logs",
+        "schema": {
+          "id": "SERIAL PRIMARY KEY",
+          "user_id": "INTEGER REFERENCES users(id)",
+          "action": "VARCHAR(50)",
+          "severity": "VARCHAR(20)",
+          "ip_address": "VARCHAR(45)",
+          "device": "VARCHAR(255)",
+          "details": "TEXT",
+          "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+        },
+        "indexes": [
+          "CREATE INDEX idx_user_id ON activity_logs(user_id);",
+          "CREATE INDEX idx_action ON activity_logs(action);",
+          "CREATE INDEX idx_severity ON activity_logs(severity);",
+          "CREATE INDEX idx_created_at ON activity_logs(created_at);"
+        ]
+      },
+      "middleware": {
+        "logging": "Middleware para registrar automaticamente todas as ações",
+        "example": "// middleware/activityLogger.js\nconst logActivity = async (userId, action, details, req) => {\n  await db.query(\n    'INSERT INTO activity_logs (user_id, action, severity, ip_address, device, details) VALUES ($1, $2, $3, $4, $5, $6)',\n    [userId, action, getSeverity(action), req.ip, req.headers['user-agent'], details]\n  );\n};"
+      }
+    }
+  }
+}

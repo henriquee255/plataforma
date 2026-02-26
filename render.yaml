@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: plataforma-backend
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: KIWIFY_API_KEY
+        sync: false
+      - key: KIWIFY_CLIENT_ID
+        sync: false
+      - key: KIWIFY_CLIENT_SECRET
+        sync: false
+      - key: KIWIFY_ACCOUNT_ID
+        sync: false
+      - key: HOTMART_CLIENT_ID
+        sync: false
+      - key: HOTMART_CLIENT_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://plataforma-frontend.onrender.com
+
+  - type: web
+    name: plataforma-frontend
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm install -g serve && serve -s dist -l 3000
+    envVars:
+      - key: VITE_API_URL
+        value: https://plataforma-backend.onrender.com/api

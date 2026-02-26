@@ -1,0 +1,97 @@
+### Plataforma CRM - API Tests
+### Use com REST Client (VS Code) ou Postman
+
+@baseUrl = http://localhost:3001
+@accessToken = your-access-token-here
+@refreshToken = your-refresh-token-here
+
+### Health Check
+GET {{baseUrl}}/health
+
+###############################################
+# AUTENTICAÇÃO
+###############################################
+
+### 1. Registrar novo usuário
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Teste Usuario",
+  "email": "teste@example.com",
+  "password": "senha12345"
+}
+
+### 2. Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "teste@example.com",
+  "password": "senha12345"
+}
+
+### 3. Renovar Token
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 4. Obter dados do usuário (requer auth)
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{accessToken}}
+
+### 5. Logout
+POST {{baseUrl}}/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###############################################
+# TESTES DE VALIDAÇÃO
+###############################################
+
+### Registro com dados inválidos (senha curta)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "email": "test@example.com",
+  "password": "123"
+}
+
+### Login com credenciais inválidas
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "teste@example.com",
+  "password": "senhaerrada"
+}
+
+### Acessar rota protegida sem token
+GET {{baseUrl}}/api/auth/me
+
+### Acessar rota protegida com token inválido
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer invalid-token-here
+
+###############################################
+# TESTE DE RATE LIMITING
+###############################################
+
+### Fazer múltiplas tentativas de login (trigger rate limit)
+# Execute este bloco 6 vezes rapidamente
+
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "teste@example.com",
+  "password": "qualquercoisa"
+}
