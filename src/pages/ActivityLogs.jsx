@@ -55,93 +55,14 @@ const ActivityLogs = ({ onNavigate }) => {
     }
   }, [user, onNavigate]);
 
-  // Mock data realista de logs
+  // Função para gerar logs (vazio - sem dados mockados)
   const generateMockLogs = () => {
-    const users = [
-      { id: 1, name: 'João Silva', email: 'joao@example.com' },
-      { id: 2, name: 'Maria Santos', email: 'maria@example.com' },
-      { id: 3, name: 'Pedro Oliveira', email: 'pedro@example.com' },
-      { id: 4, name: 'Ana Costa', email: 'ana@example.com' },
-      { id: 5, name: 'Carlos Mendes', email: 'carlos@example.com' },
-    ];
-
-    const actions = [
-      { type: 'login', label: 'Login', icon: 'FaSignInAlt', severity: 'info' },
-      { type: 'logout', label: 'Logout', icon: 'FaSignOutAlt', severity: 'info' },
-      { type: 'user_created', label: 'Criação de Conta', icon: 'FaUserPlus', severity: 'success' },
-      { type: 'profile_updated', label: 'Edição de Perfil', icon: 'FaEdit', severity: 'info' },
-      { type: 'user_deleted', label: 'Exclusão de Conta', icon: 'FaTrash', severity: 'warning' },
-      { type: 'plan_changed', label: 'Troca de Plano', icon: 'FaCreditCard', severity: 'success' },
-      { type: 'password_changed', label: 'Troca de Senha', icon: 'FaKey', severity: 'warning' },
-      { type: 'api_call', label: 'Chamada de API', icon: 'FaDatabase', severity: 'info' },
-      { type: 'failed_login', label: 'Tentativa de Login Falha', icon: 'FaExclamationTriangle', severity: 'error' },
-      { type: 'suspicious_activity', label: 'Atividade Suspeita', icon: 'FaExclamationTriangle', severity: 'error' },
-    ];
-
-    const ips = [
-      '192.168.1.100',
-      '192.168.1.101',
-      '201.45.78.90',
-      '177.89.102.34',
-      '186.203.45.12',
-      '200.150.30.45',
-    ];
-
-    const devices = [
-      'Chrome 121 - Windows 10',
-      'Safari 17 - macOS Sonoma',
-      'Firefox 122 - Ubuntu 22.04',
-      'Edge 121 - Windows 11',
-      'Chrome 121 - Android 14',
-      'Safari 17 - iOS 17',
-    ];
-
-    const now = new Date();
-
-    for (let i = 0; i < 150; i++) {
-      const user = users[Math.floor(Math.random() * users.length)];
-      const action = actions[Math.floor(Math.random() * actions.length)];
-      const hoursAgo = Math.floor(Math.random() * 720); // Últimas 30 dias
-      const timestamp = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
-
-      mockLogs.push({
-        id: i + 1,
-        timestamp: timestamp.toISOString(),
-        user: user.name,
-        userId: user.id,
-        userEmail: user.email,
-        action: action.type,
-        actionLabel: action.label,
-        actionIcon: action.icon,
-        severity: action.severity,
-        ip: ips[Math.floor(Math.random() * ips.length)],
-        device: devices[Math.floor(Math.random() * devices.length)],
-        details: getActionDetails(action.type, user.name),
-      });
-    }
-
-    return mockLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  };
-
-  const getActionDetails = (actionType, userName) => {
-    const details = {
-      login: `${userName} realizou login com sucesso`,
-      logout: `${userName} saiu do sistema`,
-      user_created: `Nova conta criada para ${userName}`,
-      profile_updated: `${userName} atualizou informações do perfil`,
-      user_deleted: `Conta de ${userName} foi deletada`,
-      plan_changed: `${userName} alterou plano de Basic para Premium`,
-      password_changed: `${userName} alterou a senha`,
-      api_call: `${userName} executou chamada à API /api/users`,
-      failed_login: `Tentativa de login falhou para ${userName}`,
-      suspicious_activity: `Múltiplas tentativas de login de IPs diferentes para ${userName}`,
-    };
-
-    return details[actionType] || `${userName} executou ação no sistema`;
+    return [];
   };
 
   // Carregar logs
   useEffect(() => {
+    const mockLogs = generateMockLogs();
     setLogs(mockLogs);
     setFilteredLogs(mockLogs);
     setIsLoading(false);

@@ -81,86 +81,25 @@ const AdminAnalytics = ({ onNavigate }) => {
     }
   }, [user, onNavigate]);
 
-  // Dados mock para gráficos
-  const [growthData, setGrowthData] = useState([
-    { date: '01/02', users: 120, revenue: 2400 },
-    { date: '05/02', users: 145, revenue: 2890 },
-    { date: '10/02', users: 178, revenue: 3560 },
-    { date: '15/02', users: 198, revenue: 3960 },
-    { date: '20/02', users: 234, revenue: 4680 },
-    { date: '24/02', users: 267, revenue: 5340 },
-  ]);
+  // Dados para gráficos (vazios por padrão - sem dados mockados)
+  const [growthData, setGrowthData] = useState([]);
+  const [planDistribution, setPlanDistribution] = useState([]);
+  const [integrationStats, setIntegrationStats] = useState([]);
+  const [channelStats, setChannelStats] = useState([]);
+  const [featureUsage, setFeatureUsage] = useState([]);
+  const [conversionFunnel, setConversionFunnel] = useState([]);
 
-  const [planDistribution, setPlanDistribution] = useState([
-    { name: 'Free', value: 450, color: '#94a3b8' },
-    { name: 'Basic', value: 180, color: '#60a5fa' },
-    { name: 'Pro', value: 95, color: '#a855f7' },
-    { name: 'Enterprise', value: 42, color: '#f59e0b' },
-  ]);
-
-  const [integrationStats, setIntegrationStats] = useState([
-    { name: 'Kiwify', users: 145, color: '#10b981' },
-    { name: 'Hotmart', users: 132, color: '#f59e0b' },
-    { name: 'Stripe', users: 98, color: '#6366f1' },
-    { name: 'PayPal', users: 76, color: '#0ea5e9' },
-    { name: 'Mercado Pago', users: 54, color: '#14b8a6' },
-  ]);
-
-  const [channelStats, setChannelStats] = useState([
-    { name: 'WhatsApp', users: 234, engagement: 92 },
-    { name: 'Instagram', users: 198, engagement: 87 },
-    { name: 'Email', users: 176, engagement: 78 },
-    { name: 'Telegram', users: 143, engagement: 85 },
-    { name: 'Facebook', users: 87, engagement: 65 },
-  ]);
-
-  const [featureUsage, setFeatureUsage] = useState([
-    { feature: 'CRM', free: 45, basic: 78, pro: 95, enterprise: 100 },
-    { feature: 'Automações', free: 0, basic: 65, pro: 89, enterprise: 98 },
-    { feature: 'Integrações', free: 23, basic: 67, pro: 92, enterprise: 100 },
-    { feature: 'Relatórios', free: 12, basic: 56, pro: 87, enterprise: 97 },
-    { feature: 'IA Assistant', free: 0, basic: 0, pro: 78, enterprise: 95 },
-  ]);
-
-  const [conversionFunnel, setConversionFunnel] = useState([
-    { stage: 'Visitantes', users: 1000, rate: 100 },
-    { stage: 'Cadastros', users: 450, rate: 45 },
-    { stage: 'Trial', users: 280, rate: 28 },
-    { stage: 'Pagantes', users: 98, rate: 9.8 },
-  ]);
-
-  // Carregar analytics
+  // Carregar analytics (vazio - sem dados mockados)
   const loadAnalytics = async () => {
     try {
       setIsLoading(true);
-      const accessToken = localStorage.getItem('plataforma_access_token');
-
-      // Simular carregamento de dados
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Dados mock
+      // Dados vazios - aguardando dados reais do backend
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setAnalytics({
-        revenue: {
-          mrr: 5340,
-          arr: 64080,
-          growth: 18.5,
-        },
-        users: {
-          total: 767,
-          new: 45,
-          active: 589,
-          trial: 178,
-          paid: 267,
-        },
-        conversion: {
-          rate: 34.8,
-          trialToPaid: 35.0,
-        },
-        engagement: {
-          avgSessionTime: 24.5,
-          featuresUsed: 5.3,
-          activeRate: 76.8,
-        },
+        revenue: { mrr: 0, arr: 0, growth: 0 },
+        users: { total: 0, new: 0, active: 0, trial: 0, paid: 0 },
+        conversion: { rate: 0, trialToPaid: 0 },
+        engagement: { avgSessionTime: 0, featuresUsed: 0, activeRate: 0 },
       });
     } catch (error) {
       console.error('Erro ao carregar analytics:', error);
