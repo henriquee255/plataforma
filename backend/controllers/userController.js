@@ -6,18 +6,12 @@ const UserModel = require('../models/User');
  */
 const getAllUsers = async (req, res) => {
   try {
-    const users = await UserModel.findAll();
-
-    // Remover senhas da resposta
-    const usersWithoutPassword = users.map((user) => {
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    });
+    const users = await UserModel.find({}).select('-password');
 
     return res.status(200).json({
       success: true,
-      users: usersWithoutPassword,
-      total: usersWithoutPassword.length,
+      users: users,
+      total: users.length,
     });
   } catch (error) {
     console.error('Erro ao listar usuários:', error);
@@ -36,7 +30,7 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findById(id).select('-password');
 
     if (!user) {
       return res.status(404).json({
@@ -45,12 +39,9 @@ const getUserById = async (req, res) => {
       });
     }
 
-    // Remover senha da resposta
-    const { password, ...userWithoutPassword } = user;
-
     return res.status(200).json({
       success: true,
-      user: userWithoutPassword,
+      user: user,
     });
   } catch (error) {
     console.error('Erro ao buscar usuário:', error);

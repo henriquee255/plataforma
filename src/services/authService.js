@@ -1,11 +1,11 @@
 /**
- * Auth Service - MOCK VERSION
- * Simulação de autenticação sem backend
+ * Auth Service - PRODUCTION VERSION
+ * Autenticação real contra backend API
  */
 
 // Configuração
-const USE_MOCK = true; // Sempre usar mock para desenvolvimento frontend-only
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const USE_MOCK = false; // DESATIVADO - Usar API REAL do backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 /**
  * Gerar token JWT falso (apenas para simulação)
