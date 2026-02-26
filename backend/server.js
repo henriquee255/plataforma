@@ -50,13 +50,11 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Rotas da API
+// Rotas da API - Essencial apenas
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/integrations', require('./routes/integrations'));
-app.use('/api/webhooks', require('./routes/webhooks'));
-app.use('/api/customers', require('./routes/customers'));
-app.use('/api/products', require('./routes/products'));
-app.use('/api/sales', require('./routes/sales'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/companies', require('./routes/companyRoutes'));
+app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
 
 // Rota 404
 app.use('*', (req, res) => {
