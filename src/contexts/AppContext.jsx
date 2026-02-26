@@ -148,52 +148,8 @@ export const AppProvider = ({ children }) => {
     }
   }, [appSettings.theme]); // FIX BUG #2: Removida duplicidade - appSettings.theme já inclui o valor necessário
 
-  // Auto-save quando dados mudam
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('userData', userData);
-    }
-  }, [userData, appSettings.autoSave]);
-
-  useEffect(() => {
-    saveData('appSettings', appSettings);
-  }, [appSettings]);
-
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('crmData', crmData);
-    }
-  }, [crmData, appSettings.autoSave]);
-
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('contactsData', contactsData);
-    }
-  }, [contactsData, appSettings.autoSave]);
-
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('teamData', teamData);
-    }
-  }, [teamData, appSettings.autoSave]);
-
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('companiesData', companiesData);
-    }
-  }, [companiesData, appSettings.autoSave]);
-
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('iaData', iaData);
-    }
-  }, [iaData, appSettings.autoSave]);
-
-  useEffect(() => {
-    if (appSettings.autoSave) {
-      saveData('integrationsData', integrationsData);
-    }
-  }, [integrationsData, appSettings.autoSave]);
+  // Auto-save DESABILITADO - Nenhum dado é persistido em localStorage
+  // Todos os dados são limpados ao iniciar a app
 
   // Função para atualizar usuário
   const updateUser = (updates) => {

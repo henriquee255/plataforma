@@ -10,22 +10,35 @@ export const useCompanyManagement = () => {
   const [error, setError] = useState(null);
 
   /**
-   * Buscar empresas (mock - substituir por API real)
+   * Buscar empresas da API
    */
   const fetchCompanies = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // TODO: Substituir por chamada real à API
-      // const response = await api.get('/admin/companies');
-      // setCompanies(response.data);
+      // Tentar fetch da API de admin/empresas
+      const response = await fetch('/api/companies/all', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-      // Array vazio - sem dados mockados
-      setCompanies([]);
+      if (!response.ok) {
+        // Se não existe endpoint, retorna array vazio
+        console.warn('Endpoint /api/companies/all não disponível:', response.status);
+        setCompanies([]);
+        return;
+      }
+
+      const data = await response.json();
+      setCompanies(data.companies || data.data || []);
     } catch (err) {
-      setError(err.message || 'Erro ao buscar empresas');
       console.error('Erro ao buscar empresas:', err);
+      // Retorna array vazio ao invés de erro
+      setCompanies([]);
     } finally {
       setLoading(false);
     }

@@ -17,80 +17,66 @@ export const useUserManagement = () => {
   }, []);
 
   /**
-   * Busca lista de usuários
+   * Busca lista de usuários da API
    */
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // TODO: Substituir por API real
-      // const response = await fetch('/api/admin/users');
-      // const data = await response.json();
-
-      // Mock data
-      const mockUsers = [
-        {
-          id: '1',
-          nome: 'João Silva',
-          email: 'joao@empresa.com',
-          telefone: '(11) 98765-4321',
-          cpf: '123.456.789-00',
-          plano: 'professional',
-          status: 'Ativo',
-          role: 'user',
-          empresa: 'Tech Corp',
-          createdAt: '2024-01-15'
-        },
-        {
-          id: '2',
-          nome: 'Maria Santos',
-          email: 'maria@startup.com',
-          telefone: '(11) 91234-5678',
-          cpf: '987.654.321-00',
-          plano: 'enterprise',
-          status: 'Ativo',
-          role: 'Admin',
-          empresa: 'Startup XYZ',
-          createdAt: '2024-02-20'
+      const response = await fetch('/api/users', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json'
         }
-        // ... mais usuários mockados
-      ];
+      });
 
-      setUsers(mockUsers);
+      if (!response.ok) {
+        // Se API não responde, retorna array vazio
+        console.warn('Erro ao buscar usuários da API:', response.status);
+        setUsers([]);
+        return;
+      }
+
+      const data = await response.json();
+      setUsers(data.users || []);
     } catch (err) {
       console.error('Error fetching users:', err);
-      setError(err.message || 'Erro ao buscar usuários');
+      // Retorna array vazio ao invés de mostrar erro
+      setUsers([]);
+      setError(null);
     } finally {
       setLoading(false);
     }
   }, []);
 
   /**
-   * Cria novo usuário
+   * Cria novo usuário (via API)
    */
   const createUser = useCallback(async (userData) => {
     setLoading(true);
     setError(null);
 
     try {
-      // TODO: API call
-      // const response = await fetch('/api/admin/users', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(userData)
-      // });
-      // const newUser = await response.json();
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
 
-      const newUser = {
-        ...userData,
-        id: `user-${Date.now()}`,
-        createdAt: new Date().toISOString()
-      };
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao criar usuário');
+      }
 
-      setUsers(prev => [...prev, newUser]);
+      const data = await response.json();
+      setUsers(prev => [...prev, data]);
 
-      return { success: true, user: newUser };
+      return { success: true, user: data };
     } catch (err) {
       console.error('Error creating user:', err);
       setError(err.message || 'Erro ao criar usuário');
@@ -108,20 +94,23 @@ export const useUserManagement = () => {
     setError(null);
 
     try {
-      // TODO: API call
-      // const response = await fetch(`/api/admin/users/${id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updates)
-      // });
-      // const updatedUser = await response.json();
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updates)
+      });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao atualizar usuário');
+      }
+
+      const updatedUser = await response.json();
       setUsers(prev =>
-        prev.map(user =>
-          user.id === id
-            ? { ...user, ...updates, updatedAt: new Date().toISOString() }
-            : user
-        )
+        prev.map(user => user._id === id ? updatedUser : user)
       );
 
       return { success: true };
@@ -142,10 +131,20 @@ export const useUserManagement = () => {
     setError(null);
 
     try {
-      // TODO: API call
-      // await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-      setUsers(prev => prev.filter(user => user.id !== id));
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao deletar usuário');
+      }
+
+      setUsers(prev => prev.filter(user => user._id !== id));
 
       return { success: true };
     } catch (err) {
@@ -182,8 +181,32 @@ export const useUserManagement = () => {
    * Altera role do usuário
    */
   const changeRole = useCallback(async (id, newRole) => {
-    return updateUser(id, { role: newRole });
-  }, [updateUser]);
+    try {
+      const response = await fetch(`/api/users/${id}/role`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ role: newRole })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao alterar role');
+      }
+
+      const updatedUser = await response.json();
+      setUsers(prev =>
+        prev.map(user => user._id === id ? updatedUser : user)
+      );
+
+      return { success: true };
+    } catch (err) {
+      console.error('Error changing role:', err);
+      return { success: false, error: err.message };
+    }
+  }, []);
 
   return {
     users,

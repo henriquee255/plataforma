@@ -6,6 +6,41 @@ const { protect } = require('../middlewares/auth');
 // ===== COMPANY ROUTES =====
 
 /**
+ * @route   GET /api/companies/all
+ * @desc    Obter TODAS as empresas (admin only)
+ * @access  Private (admin)
+ */
+router.get('/all', protect, async (req, res) => {
+  try {
+    // Verificar se é admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Acesso negado. Apenas administradores podem listar todas as empresas.',
+      });
+    }
+
+    const Company = require('../models/Company');
+    const companies = await Company.find({})
+      .populate('ownerId', 'name email')
+      .lean();
+
+    res.json({
+      success: true,
+      companies: companies,
+      total: companies.length,
+    });
+  } catch (error) {
+    console.error('Error fetching all companies:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao buscar empresas',
+      error: error.message,
+    });
+  }
+});
+
+/**
  * @route   GET /api/companies/my-companies
  * @desc    Obter empresas do usuário (owner + member)
  * @access  Private
