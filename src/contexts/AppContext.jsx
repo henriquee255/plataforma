@@ -15,37 +15,41 @@ export const AppProvider = ({ children }) => {
   const [savingStatus, setSavingStatus] = useState(''); // '', 'saving', 'saved'
   const [lastSaved, setLastSaved] = useState(null);
 
-  // Estado global do usuário
-  const [userData, setUserData] = useState(() => {
-    const saved = localStorage.getItem('userData');
-    return saved ? JSON.parse(saved) : {
-      name: '',
-      email: '',
-      avatar: '',
-      role: '',
-      cargo: '',
-      setor: '',
-      telefone: '',
-      empresa: '',
-      bio: ''
-    };
+  // LIMPAR LOCALSTORAGE NA INICIALIZAÇÃO (remover dados antigos mockados)
+  useEffect(() => {
+    // Limpar dados mockados antigos mantendo apenas autenticação
+    const keysToRemove = [
+      'userData',
+      'contactsData',
+      'crmData',
+      'teamData',
+      'companiesData',
+      'iaData',
+      'integrationsData',
+      'subscriptionStatus'
+    ];
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+  }, []);
+
+  // Estado global do usuário (VAZIO por padrão)
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    avatar: '',
+    role: '',
+    cargo: '',
+    setor: '',
+    telefone: '',
+    empresa: '',
+    bio: ''
   });
 
   // Estado global de assinatura - ACESSO COMPLETO PARA TODOS
-  const [subscriptionStatus, setSubscriptionStatus] = useState(() => {
-    // Sempre retorna 'enterprise' para acesso completo
-    const saved = localStorage.getItem('subscriptionStatus');
-    if (!saved) {
-      localStorage.setItem('subscriptionStatus', 'enterprise');
-      return 'enterprise';
-    }
-    return saved;
-  });
+  const [subscriptionStatus, setSubscriptionStatus] = useState('enterprise');
 
   // Estado global de configurações
   const [appSettings, setAppSettings] = useState(() => {
-    const saved = localStorage.getItem('appSettings');
-    const settings = saved ? JSON.parse(saved) : {
+    const settings = {
       theme: 'dark',
       notifications: true,
       autoSave: true,
@@ -64,75 +68,42 @@ export const AppProvider = ({ children }) => {
   });
 
   // Estado global do CRM
-  const [crmData, setCrmData] = useState(() => {
-    const saved = localStorage.getItem('crmData');
-    return saved ? JSON.parse(saved) : {
-      pipelines: [],
-      leads: [],
-      stages: []
-    };
+  const [crmData, setCrmData] = useState({
+    pipelines: [],
+    leads: [],
+    stages: []
   });
 
   // Estado global de Contatos
-  const [contactsData, setContactsData] = useState(() => {
-    const saved = localStorage.getItem('contactsData');
-    return saved ? JSON.parse(saved) : {
-      contacts: [],
-      groups: [],
-      tags: []
-    };
+  const [contactsData, setContactsData] = useState({
+    contacts: [],
+    groups: [],
+    tags: []
   });
 
   // Estado global da Equipe
-  const [teamData, setTeamData] = useState(() => {
-    const saved = localStorage.getItem('teamData');
-    return saved ? JSON.parse(saved) : {
-      members: [],
-      departments: [],
-      roles: []
-    };
+  const [teamData, setTeamData] = useState({
+    members: [],
+    departments: [],
+    roles: []
   });
 
   // Estado global de Empresas
-  const [companiesData, setCompaniesData] = useState(() => {
-    const saved = localStorage.getItem('companiesData');
-    return saved ? JSON.parse(saved) : {
-      companies: []
-    };
+  const [companiesData, setCompaniesData] = useState({
+    companies: []
   });
 
   // Estado global da IA
-  const [iaData, setIaData] = useState(() => {
-    const saved = localStorage.getItem('iaData');
-    return saved ? JSON.parse(saved) : {
-      config: {},
-      sources: [],
-      conversations: [],
-      learningDatabase: []
-    };
+  const [iaData, setIaData] = useState({
+    config: {},
+    sources: [],
+    conversations: [],
+    learningDatabase: []
   });
 
-  // Estado global de Integrações
-  const [integrationsData, setIntegrationsData] = useState(() => {
-    const saved = localStorage.getItem('integrationsData');
-    const defaultData = {
-      integrations: []
-    };
-
-    // Verifica se existe dados salvos E se o array de integrations não está vazio
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.integrations && Array.isArray(parsed.integrations) && parsed.integrations.length > 0) {
-          return parsed;
-        }
-      } catch (error) {
-        console.error('Erro ao carregar integrações salvas:', error);
-      }
-    }
-
-    // Retorna dados padrão se não houver dados válidos salvos
-    return defaultData;
+  // Estado global de Integrações (VAZIO por padrão)
+  const [integrationsData, setIntegrationsData] = useState({
+    integrations: []
   });
 
   // Função para salvar automaticamente
