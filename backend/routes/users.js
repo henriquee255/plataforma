@@ -1,12 +1,12 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   getAllUsers,
   getUserById,
   updateUserRole,
   deleteUser,
-} from '../controllers/userController.js';
-import { authenticate } from '../middleware/authMiddleware.js';
-import { requireAdmin } from '../middleware/requireRole.js';
+} = require('../controllers/userController');
+const { authenticate } = require('../middlewares/authMiddleware');
+const { requireAdmin } = require('../middlewares/requireRole');
 
 const router = express.Router();
 
@@ -38,4 +38,4 @@ router.patch('/:id/role', authenticate, requireAdmin, updateUserRole);
  */
 router.delete('/:id', authenticate, requireAdmin, deleteUser);
 
-export default router;
+module.exports = router;
