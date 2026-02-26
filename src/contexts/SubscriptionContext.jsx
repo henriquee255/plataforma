@@ -28,24 +28,8 @@ export const SubscriptionProvider = ({ children }) => {
       // const response = await api.get('/api/subscriptions/me');
       // setSubscription(response.data.data);
 
-      // Mock data
-        _id: 'sub-1',
-        userId: user._id,
-        plan: user.plano || 'free', // Usar plano do user temporariamente
-        status: 'active',
-        billingCycle: 'monthly',
-        startDate: new Date('2024-01-15'),
-        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        usage: {
-          companiesCreated: 0,
-          totalMembers: 0,
-          storageUsed: '0MB',
-          integrationsActive: 0,
-          automationsActive: 0,
-        },
-      };
-
-      setSubscription(mockSubscription);
+      // TODO: Buscar dados da API
+      setSubscription(null);
     } catch (err) {
       console.error('Error fetching subscription:', err);
       setError(err.message);
