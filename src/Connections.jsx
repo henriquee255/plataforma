@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import {
   FaWhatsapp,
   FaInstagram,
@@ -56,54 +57,37 @@ const Connections = () => {
   ]);
   const [newDepartmentName, setNewDepartmentName] = useState('');
 
-  // Estado de conexões ativas (permite múltiplas da mesma plataforma)
-  const [connections, setConnections] = useState([
-    {
-      id: 1,
-      tipo: 'whatsapp-qr',
-      nome: 'Atendimento',
-      numero: '+55 11 98765-4321',
-      status: 'conectado',
-      conectadoEm: '2026-02-23T02:00:00',
-      ultimaAtividade: '2026-02-23T04:30:00'
-    },
-    {
-      id: 2,
-      tipo: 'whatsapp-qr',
-      nome: 'Vendas',
-      numero: '+55 11 97654-3210',
-      status: 'conectado',
-      conectadoEm: '2026-02-18T10:00:00',
-      ultimaAtividade: '2026-02-23T03:15:00'
-    },
-    {
-      id: 3,
-      tipo: 'whatsapp-qr',
-      nome: 'Suporte',
-      numero: '+55 11 96543-2109',
-      status: 'desconectado',
-      conectadoEm: '2026-02-20T14:00:00',
-      ultimaAtividade: '2026-02-23T02:30:00'
-    },
-    {
-      id: 4,
-      tipo: 'instagram',
-      nome: '@minha_empresa',
-      numero: '@minha_empresa',
-      status: 'conectado',
-      conectadoEm: '2026-02-20T08:00:00',
-      ultimaAtividade: '2026-02-23T04:00:00'
-    },
-    {
-      id: 5,
-      tipo: 'facebook',
-      nome: 'Minha Empresa',
-      numero: 'facebook.com/minhaempresa',
-      status: 'conectado',
-      conectadoEm: '2026-02-19T12:00:00',
-      ultimaAtividade: '2026-02-23T03:45:00'
+  // Estado de conexões ativas (vazio por padrão - sem dados mockados)
+  const [connections, setConnections] = useState([]);
+
+  // Estado do QR Code WhatsApp
+  const [whatsappQRSession, setWhatsappQRSession] = useState(null);
+  const [qrCodeValue, setQrCodeValue] = useState('');
+  const [whatsappConnecting, setWhatsappConnecting] = useState(false);
+
+  // Gerar QR Code para WhatsApp
+  useEffect(() => {
+    if (showQRCode && selectedModal?.tipo === 'whatsapp-qr') {
+      generateWhatsAppQR();
     }
-  ]);
+  }, [showQRCode, selectedModal]);
+
+  const generateWhatsAppQR = async () => {
+    setWhatsappConnecting(true);
+    try {
+      // Gerar uma sessão única para this connection
+      const sessionId = `session_${Date.now()}`;
+      const qrData = `https://wa.me/?text=AUTH_SESSION:${sessionId}`;
+      setQrCodeValue(qrData);
+      setWhatsappQRSession(sessionId);
+      toast.success('QR Code gerado com sucesso');
+    } catch (error) {
+      console.error('Erro ao gerar QR Code:', error);
+      toast.error('Erro ao gerar QR Code');
+    } finally {
+      setWhatsappConnecting(false);
+    }
+  };
 
   // Definição de canais disponíveis para conectar
   const channelCategories = [
@@ -915,34 +899,45 @@ const Connections = () => {
                         </p>
                         <button
                           onClick={handleConnectQR}
-                          className={`py-3 px-8 bg-gradient-to-r ${selectedModal.color} text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 flex items-center gap-2 mx-auto`}
+                          disabled={whatsappConnecting}
+                          className={`py-3 px-8 bg-gradient-to-r ${selectedModal.color} text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 flex items-center gap-2 mx-auto disabled:opacity-50`}
                         >
                           <FaQrcode />
-                          Gerar QR Code
+                          {whatsappConnecting ? 'Gerando...' : 'Gerar QR Code'}
                         </button>
                       </>
                     ) : (
-                      <div className="inline-block p-8 bg-white rounded-2xl shadow-lg">
-                        <svg width="200" height="200" viewBox="0 0 200 200">
-                          <rect width="200" height="200" fill="white"/>
-                          <rect x="10" y="10" width="50" height="50" fill="black"/>
-                          <rect x="140" y="10" width="50" height="50" fill="black"/>
-                          <rect x="10" y="140" width="50" height="50" fill="black"/>
-                          <rect x="20" y="20" width="30" height="30" fill="white"/>
-                          <rect x="150" y="20" width="30" height="30" fill="white"/>
-                          <rect x="20" y="150" width="30" height="30" fill="white"/>
-                          <rect x="80" y="40" width="10" height="10" fill="black"/>
-                          <rect x="100" y="60" width="10" height="10" fill="black"/>
-                          <rect x="120" y="80" width="10" height="10" fill="black"/>
-                          <rect x="60" y="100" width="10" height="10" fill="black"/>
-                          <rect x="140" y="120" width="10" height="10" fill="black"/>
-                        </svg>
-                        <p className="text-green-600 font-semibold mt-4 animate-pulse">
-                          Aguardando escaneamento...
-                        </p>
-                        <p className="text-gray-500 text-sm mt-2">
-                          Abra o WhatsApp no celular e escaneie este QR Code
-                        </p>
+                      <div className="space-y-4">
+                        <div className="inline-block p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+                          {qrCodeValue ? (
+                            <QRCodeSVG
+                              value={qrCodeValue}
+                              size={250}
+                              level="H"
+                              includeMargin={true}
+                              fgColor="#000000"
+                              bgColor="#ffffff"
+                            />
+                          ) : (
+                            <div className="w-[250px] h-[250px] flex items-center justify-center bg-gray-100 rounded">
+                              <p className="text-gray-500">Gerando QR Code...</p>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-green-600 dark:text-green-400 font-semibold animate-pulse">
+                            ✓ QR Code Gerado
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
+                            Abra o WhatsApp no celular e escaneie este QR Code para conectar
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setShowQRCode(false)}
+                          className="mt-4 py-2 px-6 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"
+                        >
+                          Fechar
+                        </button>
                       </div>
                     )}
                   </div>

@@ -32,6 +32,7 @@ import {
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useAppContext } from './contexts/AppContext';
 import { useToast } from './contexts/ToastContext';
+import { useSubscription } from './contexts/SubscriptionContext';
 import { useConfirm } from './hooks/useConfirm';
 import ConfirmDialog from './components/ConfirmDialog';
 import UpgradeBanner from './components/UpgradeBanner';
@@ -44,6 +45,11 @@ import integrationService from './services/integrationService';
 // TODO: Adicionar retry logic para falhas de API
 const Integrations = ({ integrations = [], setIntegrations = () => {}, onNavigate = () => {} }) => {
   const { getCurrentPlan, canAddIntegration, updateIntegrations, integrationsData } = useAppContext();
+  const { currentCompany } = useSubscription();
+
+  // Filtrar integrações por empresa atual
+  const companyId = currentCompany?._id;
+
   const toast = useToast();
   const { confirmState, confirm, closeConfirm } = useConfirm();
   const currentPlan = getCurrentPlan();
@@ -234,13 +240,16 @@ const Integrations = ({ integrations = [], setIntegrations = () => {}, onNavigat
 
   const [formData, setFormData] = useState({});
 
-  // Filtrar integrações
-  const filteredIntegrations = integrations.filter(integration => {
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === 'all' || integration.category === categoryFilter;
-    const matchesStatus = statusFilter === 'all' || integration.status === statusFilter;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+  // Filtrar integrações por empresa atual e outros critérios
+  const baseIntegrations = integrationsData?.integrations || integrations || [];
+  const filteredIntegrations = baseIntegrations
+    .filter(integration => integration.companyId === companyId || !companyId) // Filtrar por empresa
+    .filter(integration => {
+      const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = categoryFilter === 'all' || integration.category === categoryFilter;
+      const matchesStatus = statusFilter === 'all' || integration.status === statusFilter;
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
 
   // Agrupar por categoria
   const groupedIntegrations = {

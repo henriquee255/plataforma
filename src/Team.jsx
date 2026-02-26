@@ -46,12 +46,18 @@ import {
 } from 'react-icons/fa';
 import { useAppContext } from './contexts/AppContext';
 import { useToast } from './contexts/ToastContext';
+import { useSubscription } from './contexts/SubscriptionContext';
 import UpgradeBanner from './components/UpgradeBanner';
 
 const Team = ({ onNavigate = () => {} }) => {
   const toast = useToast();
   // Context
   const { getCurrentPlan, canAddTeamMember, teamData } = useAppContext();
+  const { currentCompany } = useSubscription();
+
+  // Filtrar membros por empresa atual
+  const companyId = currentCompany?._id;
+  const filteredMembers = teamData?.members?.filter(m => m.companyId === companyId) || [];
 
   // Estados principais
   const [searchTerm, setSearchTerm] = useState('');

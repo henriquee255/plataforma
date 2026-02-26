@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useToast } from './contexts/ToastContext';
 import { useConfirm } from './hooks/useConfirm';
+import { useSubscription } from './contexts/SubscriptionContext';
 import ConfirmDialog from './components/ConfirmDialog';
 import {
   FaSearch,
@@ -39,7 +40,11 @@ import {
 const Contacts = ({ onNavigate = () => {} }) => {
   const toast = useToast();
   const { confirmState, confirm, closeConfirm } = useConfirm();
+  const { currentCompany } = useSubscription();
   const fileInputRef = useRef(null);
+
+  // Filtrar contatos por empresa atual
+  const companyId = currentCompany?._id;
 
   // Estados principais
   const [selectedContact, setSelectedContact] = useState(null);

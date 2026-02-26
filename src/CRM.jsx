@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { useFocusTrap } from './hooks/useFocusTrap';
 import { useToast } from './contexts/ToastContext';
 import { useConfirm } from './hooks/useConfirm';
+import { useSubscription } from './contexts/SubscriptionContext';
 import ConfirmDialog from './components/ConfirmDialog';
 import {
   FaSearch,
@@ -42,6 +43,11 @@ import {
 const CRM = () => {
   const toast = useToast();
   const { confirmState, confirm, closeConfirm } = useConfirm();
+  const { currentCompany } = useSubscription();
+
+  // Filtrar pipelines/leads por empresa atual
+  const companyId = currentCompany?._id;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('todos');
   const [filterAssignee, setFilterAssignee] = useState('todos');

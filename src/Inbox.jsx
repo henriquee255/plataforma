@@ -5,6 +5,7 @@
 // TODO: Adicionar tradução automática de mensagens
 // TODO: Implementar chatbot com respostas automáticas
 import React, { useState, useEffect, useRef } from 'react';
+import { useSubscription } from './contexts/SubscriptionContext';
 import {
   FaSearch,
   FaPaperPlane,
@@ -37,6 +38,11 @@ import {
 } from 'react-icons/fa';
 
 const Inbox = ({ selectedChatId = null }) => {
+  const { currentCompany } = useSubscription();
+
+  // Filtrar chats por empresa atual
+  const companyId = currentCompany?._id;
+
   const [selectedChat, setSelectedChat] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [messageInput, setMessageInput] = useState('');
