@@ -56,6 +56,9 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/companies', require('./routes/companyRoutes'));
 app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
 app.use('/api/crm', require('./routes/crm'));
+app.use('/api/contacts', require('./routes/contacts'));
+app.use('/api/team', require('./routes/team'));
+app.use('/api/inbox', require('./routes/inbox'));
 app.use('/api/whatsapp', require('./routes/whatsapp'));
 
 // Rota 404
