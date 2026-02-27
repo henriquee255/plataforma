@@ -55,6 +55,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/companies', require('./routes/companyRoutes'));
 app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
+app.use('/api/crm', require('./routes/crm'));
 
 // Rota 404
 app.use('*', (req, res) => {
