@@ -240,7 +240,7 @@ const Connections = () => {
     setEditingConnection(null);
   };
 
-  const handleConnectQR = () => {
+  const handleConnectQR = async () => {
     // Verificar limite de canais
     const activeChannels = connections.filter(c => c.status === 'conectado').length;
     if (!canAddChannel(activeChannels)) {
@@ -249,22 +249,12 @@ const Connections = () => {
       return;
     }
 
+    // Gerar QR code e manter modal aberto
     setShowQRCode(true);
-    // Simular conexão após 3 segundos
-    setTimeout(() => {
-      const newConnection = {
-        id: Date.now(),
-        tipo: selectedModal.id,
-        nome: formData.nome || `${selectedModal.nome} ${connections.filter(c => c.tipo === selectedModal.id).length + 1}`,
-        numero: `+55 11 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
-        status: 'conectado',
-        conectadoEm: new Date().toISOString(),
-        ultimaAtividade: new Date().toISOString()
-      };
-      setConnections([...connections, newConnection]);
-      handleCloseModal();
-      toast.success('Conexão estabelecida com sucesso!');
-    }, 3000);
+    await generateWhatsAppQR();
+
+    // ⚠️ NÃO fecha automaticamente - Usuário escaneia o QR e é redirecionado
+    // Próximo: Implementar webhook para confirmar conexão quando WhatsApp conectar
   };
 
   const handleConnectOAuth = () => {
@@ -912,7 +902,7 @@ const Connections = () => {
                 </div>
 
                 {/* Modal WhatsApp QR */}
-                {selectedModal.tipo === 'qr' && (
+                {selectedModal.tipo === 'whatsapp-qr' && (
                   <div className="text-center py-4">
                     {!showQRCode ? (
                       <>
